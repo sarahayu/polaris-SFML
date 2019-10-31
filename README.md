@@ -11,7 +11,12 @@ Features include:
 
 I made this program so I would be able to locate constellations in bright-light settings, but ended up making the program to be as realistic as possible to the night sky and having the program use purely math instead of fetching information via Internet connection as a challenge for myself.
 
-Screenshots below:
+## Sources:
+ - Star database: http://www.astronexus.com/hyg
+ - City database: https://www.geonames.org/export/
+
+## Screenshots
+
 ![Program GUI](https://github.com/sarahayu/polaris-SFML/blob/master/screenshots/interface.png?raw=true)
 
 *Program GUI*
@@ -23,5 +28,3 @@ Screenshots below:
 ![San Francisco in low-light condition](https://github.com/sarahayu/polaris-SFML/blob/master/screenshots/sf-low-light-conditions.png?raw=true)
 
 *San Francisco in low-light condition*
-
-TODO: add libraries used
