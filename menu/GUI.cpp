@@ -21,15 +21,12 @@ void GUI::draw(sf::RenderWindow & window, const RenderSettings & renderSettings)
 	sf::Vector2f windowSize(window.getSize());
 	window.setView(sf::View(windowSize / 2.0f, windowSize));
 
-	sf::Vector2f menuLoc(window.getSize().x - MENU_WIDTH, 0.0f);
-	m_menuRect.setPosition(menuLoc);
-	m_menuRect.setSize({ MENU_WIDTH, (float)window.getSize().y });
 	window.draw(m_menuRect);
 
 	for (auto &itemPair : m_menuItems)
 	{
 		const MenuItem::Ptr &item = itemPair.second;
-		item->setParentLocation(menuLoc);
+		item->setParentLocation(m_menuRect.getPosition());
 		item->draw(window);
 	}
 }
@@ -37,6 +34,10 @@ void GUI::draw(sf::RenderWindow & window, const RenderSettings & renderSettings)
 bool GUI::receiveInput(const sf::Event & evnt, const RenderSettings & renderSettings)
 {
 	if (!renderSettings.windowFocused) return false;
+
+	sf::Vector2f menuLoc(renderSettings.windowSize.x - MENU_WIDTH, 0.0f);
+	m_menuRect.setPosition(menuLoc);
+	m_menuRect.setSize({ MENU_WIDTH, renderSettings.windowSize.y });
 
 	switch (evnt.type)
 	{

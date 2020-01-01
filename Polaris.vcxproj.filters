@@ -113,9 +113,6 @@
     <ClInclude Include="RenderSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UPDeclarations.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="listeners\EventListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>

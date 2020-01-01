@@ -10,7 +10,6 @@
 #include "RealTimeInput.h"
 #include "Renderer.h"
 #include "RenderSettings.h"
-#include "UPDeclarations.h"
 #include "celestial-sphere/CelestialSphere.h"
 
 
@@ -29,8 +28,9 @@ private:
 	sf::RenderWindow m_window;
 
 	CelestialSphere m_celestialSphere;
-
-	std::map<const sf::Event::EventType, std::vector<EventListener_UP> > m_listenerMap;
+	
+	std::vector<std::pair<sf::Event::EventType, EventListener_UP>> m_listeners;
+	//std::map<sf::Event::EventType, std::vector<EventListener_UP> > m_listenerMap;
 	RenderSettings m_renderSettings;
 
 	Menu m_menu;

@@ -51,6 +51,8 @@ const std::queue<sf::Event> Polaris::checkForInput()
 				}
 			}
 			break;
+			case sf::Event::Resized:
+				m_renderSettings.windowSize = sf::Vector2f(evnt.size.width, evnt.size.height);
 			default:
 			{
 				eventQueue.push(evnt);
@@ -71,23 +73,24 @@ Polaris::Polaris()
 	//m_window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Polaris");
 
 	m_renderSettings.menuBounds = m_menu.getBounds();
+	m_renderSettings.windowSize = sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
 	m_window.setMouseCursorVisible(false);											// TODO remove later
 	m_window.setKeyRepeatEnabled(false);
 
 	sf::Mouse::setPosition(sf::Vector2i(m_window.getSize()/ 2U), m_window);
 
-	m_listenerMap[sf::Event::Closed].push_back(std::make_unique<WindowCloseListener>(m_renderSettings, m_window));
-	m_listenerMap[sf::Event::GainedFocus].push_back(std::make_unique<GainedFocusListener>(GainedFocusListener(m_renderSettings, m_window)));
-	m_listenerMap[sf::Event::MouseMoved].push_back(std::make_unique<ViewMoveListener>(ViewMoveListener(m_renderSettings, m_window)));
-	m_listenerMap[sf::Event::MouseWheelScrolled].push_back(std::make_unique<ViewZoomListener>(ViewZoomListener(m_renderSettings)));
-	m_listenerMap[sf::Event::MouseWheelScrolled].push_back(std::make_unique<IncreaseVisibilityListener>(IncreaseVisibilityListener(m_renderSettings)));
-	m_listenerMap[sf::Event::KeyPressed].push_back(std::make_unique<UnbindMouseListener>(UnbindMouseListener(m_renderSettings, m_window)));
-	m_listenerMap[sf::Event::KeyPressed].push_back(std::make_unique<KeyPressListener>(KeyPressListener(m_renderSettings)));
-	m_listenerMap[sf::Event::KeyPressed].push_back(std::make_unique<ToggleMenuListener>(ToggleMenuListener(m_renderSettings, m_menu)));
-	m_listenerMap[sf::Event::KeyPressed].push_back(std::make_unique<ToggleGridlinesListener>(ToggleGridlinesListener(m_renderSettings)));
-	m_listenerMap[sf::Event::LostFocus].push_back(std::make_unique<LostFocusListener>(LostFocusListener(m_renderSettings, m_window)));
-	m_listenerMap[sf::Event::MouseButtonPressed].push_back(std::make_unique<WindowReenterListener>(WindowReenterListener(m_renderSettings, m_window)));
-	m_listenerMap[sf::Event::Resized].push_back(std::make_unique<WindowResizedListener>(WindowResizedListener(m_renderSettings, m_window)));
+	m_listeners.push_back({ sf::Event::Closed,std::make_unique<WindowCloseListener>(m_renderSettings, m_window) });
+	m_listeners.push_back({ sf::Event::GainedFocus,std::make_unique<GainedFocusListener>(GainedFocusListener(m_renderSettings, m_window)) });
+	m_listeners.push_back({ sf::Event::Resized,std::make_unique<WindowResizedListener>(WindowResizedListener(m_renderSettings, m_menu)) });
+	m_listeners.push_back({ sf::Event::MouseMoved,std::make_unique<ViewMoveListener>(ViewMoveListener(m_renderSettings, m_window)) });
+	m_listeners.push_back({ sf::Event::MouseWheelScrolled,std::make_unique<ViewZoomListener>(ViewZoomListener(m_renderSettings)) });
+	m_listeners.push_back({ sf::Event::MouseWheelScrolled,std::make_unique<IncreaseVisibilityListener>(IncreaseVisibilityListener(m_renderSettings)) });
+	m_listeners.push_back({ sf::Event::KeyPressed,std::make_unique<UnbindMouseListener>(UnbindMouseListener(m_renderSettings, m_window)) });
+	m_listeners.push_back({ sf::Event::KeyPressed,std::make_unique<KeyPressListener>(KeyPressListener(m_renderSettings)) });
+	m_listeners.push_back({ sf::Event::KeyPressed,std::make_unique<ToggleMenuListener>(ToggleMenuListener(m_renderSettings, m_menu)) });
+	m_listeners.push_back({ sf::Event::KeyPressed,std::make_unique<ToggleGridlinesListener>(ToggleGridlinesListener(m_renderSettings)) });
+	m_listeners.push_back({ sf::Event::LostFocus,std::make_unique<LostFocusListener>(LostFocusListener(m_renderSettings, m_window)) });
+	m_listeners.push_back({ sf::Event::MouseButtonPressed,std::make_unique<WindowReenterListener>(WindowReenterListener(m_renderSettings, m_window)) });
 
 	m_renderer.render();
 
@@ -117,15 +120,9 @@ void Polaris::loop()
 				}
 			}
 
-			auto &listeners = m_listenerMap.find(evnt.type);
-
-			if (listeners != m_listenerMap.end())
-			{
-				for (auto &listener : listeners->second)
-				{
-					renderChanged = listener->handleEvent(evnt) || renderChanged;
-				}
-			}
+			for (auto &listener : m_listeners)
+				if (listener.first == evnt.type)
+					renderChanged = listener.second->handleEvent(evnt) || renderChanged;
 
 		}
 

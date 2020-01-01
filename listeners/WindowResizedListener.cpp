@@ -1,13 +1,14 @@
 #include "WindowResizedListener.h"
-#include <iostream>
+#include "../menu/Menu.h"
 
-WindowResizedListener::WindowResizedListener(RenderSettings & renderSettings, const sf::RenderWindow & window)
-	: EventListener(renderSettings), r_window(window)
+WindowResizedListener::WindowResizedListener(RenderSettings & renderSettings, const Menu &menu)
+	: EventListener(renderSettings), r_menu(menu)
 {
 }
 
 bool WindowResizedListener::handleEvent(const sf::Event & evnt)
 {
+	r_renderSettings.menuBounds = r_menu.getBounds();
 	/* FIX THIS SOMETIME
 	if (r_renderSettings.mouseGrabbed)
 	{

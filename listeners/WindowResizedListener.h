@@ -1,15 +1,15 @@
 #pragma once
 #include "EventListener.h"
 
-namespace sf { class RenderWindow; }
+class Menu;
 
 class WindowResizedListener : public EventListener
 {
 public:
-	WindowResizedListener(RenderSettings &renderSettings, const sf::RenderWindow &window);
+	WindowResizedListener(RenderSettings &renderSettings, const Menu &menu);
 
 	bool handleEvent(const sf::Event &evnt);
 
 private:
-	const sf::RenderWindow &r_window;
+	const Menu &r_menu;
 };

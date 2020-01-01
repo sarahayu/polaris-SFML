@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "../RenderSettings.h"
 
 namespace sf { class Event; }
@@ -14,3 +15,5 @@ public:
 protected:
 	RenderSettings &r_renderSettings;
 };
+
+typedef std::unique_ptr<EventListener> EventListener_UP;

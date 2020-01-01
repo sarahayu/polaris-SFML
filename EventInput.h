@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "UPDeclarations.h"
 #include <queue>
 
 class EventInput

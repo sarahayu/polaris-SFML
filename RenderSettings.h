@@ -15,5 +15,5 @@ struct RenderSettings
 	sf::FloatRect menuBounds;	// for mouse reenter
 	sf::FloatRect menuView;
 	float GST = 0.0f;
-	//sf::Vector2f windowSize;
+	sf::Vector2f windowSize;
 };
