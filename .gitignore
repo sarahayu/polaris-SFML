@@ -349,3 +349,5 @@ healthchecksdb
 MigrationBackup/
 
 [Dd]esktop.ini
+resources.old/
+ignored-bu/
